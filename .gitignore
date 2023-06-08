@@ -2,6 +2,7 @@
 dreambooth/output/*
 uncond_img_gen/output/*
 .DS_Store
+**/wandb/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
