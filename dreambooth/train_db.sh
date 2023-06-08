@@ -7,7 +7,7 @@ accelerate launch train_dreambooth.py \
   --instance_data_dir=$INSTANCE_DIR \
   --output_dir=$OUTPUT_DIR \
   --instance_prompt="a photo of human chest x-ray" \
-  --resolution=512 \
+  --resolution=1024 \
   --train_batch_size=1 \
   --gradient_accumulation_steps=1 \
   --learning_rate=5e-6 \

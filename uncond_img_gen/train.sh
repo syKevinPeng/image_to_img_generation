@@ -1,6 +1,6 @@
 accelerate launch train_unconditional.py \
   --train_data_dir="/home/siyuan/research/image_to_img_generation/resources/xray_images/normal" \
-  --resolution=64 \
+  --resolution=512 \
   --output_dir="./output" \
   --train_batch_size=16 \
   --num_epochs=100 \
