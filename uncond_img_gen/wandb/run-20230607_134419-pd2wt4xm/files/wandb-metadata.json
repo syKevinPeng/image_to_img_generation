@@ -1,0 +1,137 @@
+{
+    "os": "Linux-5.15.90.1-microsoft-standard-WSL2-x86_64-with-glibc2.31",
+    "python": "3.11.3",
+    "heartbeatAt": "2023-06-07T17:44:20.282196",
+    "startedAt": "2023-06-07T17:44:19.944992",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--train_data_dir=/home/siyuan/research/image_to_img_generation/resources/xray_images/normal",
+        "--resolution=64",
+        "--output_dir=./output",
+        "--train_batch_size=16",
+        "--num_epochs=100",
+        "--gradient_accumulation_steps=1",
+        "--learning_rate=1e-4",
+        "--lr_warmup_steps=500",
+        "--mixed_precision=no",
+        "--logger",
+        "wandb"
+    ],
+    "state": "running",
+    "program": "/home/siyuan/research/image_to_img_generation/uncond_img_gen/train_unconditional.py",
+    "codePath": "uncond_img_gen/train_unconditional.py",
+    "git": {
+        "remote": "git@github.com:syKevinPeng/image_to_img_generation.git",
+        "commit": "a6115319ae37cffb69d366916a5097d8908a934f"
+    },
+    "email": "peng2000sy@gmail.com",
+    "root": "/home/siyuan/research/image_to_img_generation",
+    "host": "siyuandesktop",
+    "username": "siyuan",
+    "executable": "/home/siyuan/mambaforge/envs/huggingface/bin/python3.11",
+    "cpu_count": 8,
+    "cpu_count_logical": 16,
+    "cpu_freq": {
+        "current": 3600.0129999999995,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "total": 491.0844039916992,
+        "used": 177.09689712524414
+    },
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3090",
+            "memory_total": 25769803776
+        }
+    ],
+    "memory": {
+        "total": 15.578392028808594
+    }
+}

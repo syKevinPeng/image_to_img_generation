@@ -1,5 +1,5 @@
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
-export INSTANCE_DIR="/Users/siyuan/Desktop/study/research/image_to_img_generation/resources/xray_images/normal"
+export INSTANCE_DIR="/home/siyuan/research/image_to_img_generation/resources/xray_images/normal"
 export OUTPUT_DIR="./output"
 
 accelerate launch train_dreambooth.py \
@@ -14,4 +14,4 @@ accelerate launch train_dreambooth.py \
   --lr_scheduler="constant" \
   --lr_warmup_steps=0 \
   --max_train_steps=400 \
-  --push_to_hub
+  --report_to="wandb"

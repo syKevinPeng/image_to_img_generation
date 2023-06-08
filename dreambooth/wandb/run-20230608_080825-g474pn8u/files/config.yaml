@@ -1,0 +1,211 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.3
+    cli_version: 0.15.4
+    framework: huggingface
+    huggingface_version: 4.29.2
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1686226105.653236
+    t:
+      1:
+      - 1
+      - 11
+      - 41
+      - 49
+      - 55
+      - 71
+      - 83
+      2:
+      - 1
+      - 11
+      - 41
+      - 49
+      - 55
+      - 71
+      - 83
+      3:
+      - 2
+      - 23
+      4: 3.11.3
+      5: 0.15.4
+      6: 4.29.2
+      8:
+      - 5
+pretrained_model_name_or_path:
+  desc: null
+  value: CompVis/stable-diffusion-v1-4
+revision:
+  desc: null
+  value: null
+tokenizer_name:
+  desc: null
+  value: null
+instance_data_dir:
+  desc: null
+  value: /home/siyuan/research/image_to_img_generation/resources/xray_images/normal
+class_data_dir:
+  desc: null
+  value: null
+instance_prompt:
+  desc: null
+  value: a photo of human chest x-ray
+class_prompt:
+  desc: null
+  value: null
+with_prior_preservation:
+  desc: null
+  value: false
+prior_loss_weight:
+  desc: null
+  value: 1.0
+num_class_images:
+  desc: null
+  value: 100
+output_dir:
+  desc: null
+  value: ./output
+seed:
+  desc: null
+  value: null
+resolution:
+  desc: null
+  value: 512
+center_crop:
+  desc: null
+  value: false
+train_text_encoder:
+  desc: null
+  value: false
+train_batch_size:
+  desc: null
+  value: 1
+sample_batch_size:
+  desc: null
+  value: 4
+num_train_epochs:
+  desc: null
+  value: 2
+max_train_steps:
+  desc: null
+  value: 400
+checkpointing_steps:
+  desc: null
+  value: 500
+checkpoints_total_limit:
+  desc: null
+  value: null
+resume_from_checkpoint:
+  desc: null
+  value: null
+gradient_accumulation_steps:
+  desc: null
+  value: 1
+gradient_checkpointing:
+  desc: null
+  value: false
+learning_rate:
+  desc: null
+  value: 5.0e-06
+scale_lr:
+  desc: null
+  value: false
+lr_scheduler:
+  desc: null
+  value: constant
+lr_warmup_steps:
+  desc: null
+  value: 0
+lr_num_cycles:
+  desc: null
+  value: 1
+lr_power:
+  desc: null
+  value: 1.0
+use_8bit_adam:
+  desc: null
+  value: false
+dataloader_num_workers:
+  desc: null
+  value: 0
+adam_beta1:
+  desc: null
+  value: 0.9
+adam_beta2:
+  desc: null
+  value: 0.999
+adam_weight_decay:
+  desc: null
+  value: 0.01
+adam_epsilon:
+  desc: null
+  value: 1.0e-08
+max_grad_norm:
+  desc: null
+  value: 1.0
+push_to_hub:
+  desc: null
+  value: false
+hub_token:
+  desc: null
+  value: null
+hub_model_id:
+  desc: null
+  value: null
+logging_dir:
+  desc: null
+  value: logs
+allow_tf32:
+  desc: null
+  value: false
+report_to:
+  desc: null
+  value: wandb
+validation_prompt:
+  desc: null
+  value: null
+num_validation_images:
+  desc: null
+  value: 4
+validation_steps:
+  desc: null
+  value: 100
+mixed_precision:
+  desc: null
+  value: null
+prior_generation_precision:
+  desc: null
+  value: null
+local_rank:
+  desc: null
+  value: -1
+enable_xformers_memory_efficient_attention:
+  desc: null
+  value: false
+set_grads_to_none:
+  desc: null
+  value: false
+offset_noise:
+  desc: null
+  value: false
+pre_compute_text_embeddings:
+  desc: null
+  value: false
+tokenizer_max_length:
+  desc: null
+  value: null
+text_encoder_use_attention_mask:
+  desc: null
+  value: false
+skip_save_text_encoder:
+  desc: null
+  value: false
+validation_images:
+  desc: null
+  value: null
+class_labels_conditioning:
+  desc: null
+  value: null

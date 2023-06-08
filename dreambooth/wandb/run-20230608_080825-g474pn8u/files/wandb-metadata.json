@@ -1,0 +1,138 @@
+{
+    "os": "Linux-5.15.90.1-microsoft-standard-WSL2-x86_64-with-glibc2.31",
+    "python": "3.11.3",
+    "heartbeatAt": "2023-06-08T12:08:26.057015",
+    "startedAt": "2023-06-08T12:08:25.617594",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--pretrained_model_name_or_path=CompVis/stable-diffusion-v1-4",
+        "--instance_data_dir=/home/siyuan/research/image_to_img_generation/resources/xray_images/normal",
+        "--output_dir=./output",
+        "--instance_prompt=a photo of human chest x-ray",
+        "--resolution=512",
+        "--train_batch_size=1",
+        "--gradient_accumulation_steps=1",
+        "--learning_rate=5e-6",
+        "--lr_scheduler=constant",
+        "--lr_warmup_steps=0",
+        "--max_train_steps=400",
+        "--report_to=wandb"
+    ],
+    "state": "running",
+    "program": "/home/siyuan/research/image_to_img_generation/dreambooth/train_dreambooth.py",
+    "codePath": "dreambooth/train_dreambooth.py",
+    "git": {
+        "remote": "git@github.com:syKevinPeng/image_to_img_generation.git",
+        "commit": "a6115319ae37cffb69d366916a5097d8908a934f"
+    },
+    "email": "peng2000sy@gmail.com",
+    "root": "/home/siyuan/research/image_to_img_generation",
+    "host": "siyuandesktop",
+    "username": "siyuan",
+    "executable": "/home/siyuan/mambaforge/envs/huggingface/bin/python3.11",
+    "cpu_count": 8,
+    "cpu_count_logical": 16,
+    "cpu_freq": {
+        "current": 3600.0129999999995,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 3600.013,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "total": 491.0844039916992,
+        "used": 185.51536560058594
+    },
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3090",
+            "memory_total": 25769803776
+        }
+    ],
+    "memory": {
+        "total": 15.578392028808594
+    }
+}
