@@ -1,11 +1,12 @@
 accelerate launch train_unconditional.py \
-  --train_data_dir="/home/siyuan/research/image_to_img_generation/resources/xray_images/normal" \
+  --train_data_dir="/home/siyuan/image_to_img_generation/resources/xray_images/normal_100" \
   --resolution=512 \
-  --output_dir="./output" \
-  --train_batch_size=16 \
-  --num_epochs=100 \
+  --output_dir="./output_100" \
+  --train_batch_size=1 \
+  --num_epochs=120 \
   --gradient_accumulation_steps=1 \
   --learning_rate=1e-4 \
   --lr_warmup_steps=500 \
   --mixed_precision=no \
-  --logger "wandb" 
+  --logger "wandb" \
+  --resume_from_checkpoint 'latest'
