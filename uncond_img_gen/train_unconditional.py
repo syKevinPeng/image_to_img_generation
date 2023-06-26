@@ -13,11 +13,12 @@ import torch.nn.functional as F
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration
-from datasets import load_dataset
+from datasets import load_dataset, Image
 from huggingface_hub import HfFolder, Repository, create_repo, whoami
 from packaging import version
 from torchvision import transforms
 from tqdm.auto import tqdm
+from pathlib import Path
 
 import diffusers
 from diffusers import DDPMPipeline, DDPMScheduler, UNet2DModel
@@ -68,6 +69,12 @@ def parse_args():
         type=str,
         default=None,
         help="The config of the Dataset, leave as None if there's only one config.",
+    )
+    parser.add_argument(
+        "--num_img_to_train",
+        type=int,
+        default=None,
+        help="The number of images to use for training. If not set, all the images in the dataset will be used.",
     )
     parser.add_argument(
         "--model_config_name_or_path",
@@ -460,10 +467,20 @@ def main(args):
             split="train",
         )
     else:
-        dataset = load_dataset("imagefolder", data_dir=args.train_data_dir, cache_dir=args.cache_dir, split="train")
+        # dataset = load_dataset("imagefolder", data_dir=args.train_data_dir, cache_dir=args.cache_dir, split="train")
         # See more about loading custom images at
         # https://huggingface.co/docs/datasets/v2.4.0/en/image_load#imagefolder
-
+        # customize dataset selection here
+        # get a list of subfiles
+        path_list = list(Path(args.train_data_dir).glob("*.png"))
+        if len(path_list) == 0:
+            raise ValueError("No images found in the training data directory.")
+        if args.num_img_to_train is not None:
+            if args.num_img_to_train > len(path_list): raise Exception("num_img_to_train is larger than the number of images in the training data directory.")
+            path_list = path_list[: args.num_img_to_train]
+        else:
+            print("Using all images in the training data directory.")
+        dataset = datasets.Dataset.from_dict({"image": [str(path) for path in path_list]}).cast_column("image", Image(decode=True))
     # Preprocessing the datasets and DataLoaders creation.
     augmentations = transforms.Compose(
         [
@@ -507,6 +524,9 @@ def main(args):
     if accelerator.is_main_process:
         run = os.path.split(__file__)[-1].split(".")[0]
         accelerator.init_trackers(run)
+        # project_name="img_gen_pipeline",
+        # config = args
+        # accelerator.init_trackers(project_name = project_name, config=config)
 
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
