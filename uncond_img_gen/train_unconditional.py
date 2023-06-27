@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 import accelerate
+from click import option
 import datasets
 import torch
 import torch.nn.functional as F
@@ -21,6 +22,7 @@ from packaging import version
 from torchvision import transforms
 from tqdm.auto import tqdm
 from pathlib import Path
+import torchmetrics
 
 import diffusers
 from diffusers import DDPMPipeline, DDPMScheduler, UNet2DModel
@@ -203,7 +205,7 @@ def parse_args():
     parser.add_argument(
         "--logger",
         type=str,
-        default="tensorboard",
+        default="wandb",
         choices=["tensorboard", "wandb"],
         help=(
             "Whether to use [tensorboard](https://www.tensorflow.org/tensorboard) or [wandb](https://www.wandb.ai)"
@@ -525,7 +527,7 @@ def main(args):
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
         run = os.path.split(__file__)[-1].split(".")[0]
-        accelerator.init_trackers(run)
+        accelerator.init_trackers(run, config=args)
         # project_name="img_gen_pipeline",
         # config = args
         # accelerator.init_trackers(project_name = project_name, config=config)

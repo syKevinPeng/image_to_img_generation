@@ -9,7 +9,6 @@ accelerate launch train_unconditional.py \
   --learning_rate=1e-4 \
   --lr_warmup_steps=500 \
   --mixed_precision=no \
-  --logger "wandb" \
   --eval_batch_size 5 \
   --save_images_epochs 1 \
   --ddpm_num_steps 5 \
