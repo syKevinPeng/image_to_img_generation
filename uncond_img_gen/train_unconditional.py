@@ -7,9 +7,9 @@ from pathlib import Path
 from typing import Optional
 
 import accelerate
-from click import option
 import datasets
 import torch
+import numpy as np
 import torch.nn.functional as F
 from accelerate import Accelerator
 from accelerate.logging import get_logger
@@ -22,7 +22,8 @@ from packaging import version
 from torchvision import transforms
 from tqdm.auto import tqdm
 from pathlib import Path
-import torchmetrics
+from torchmetrics.image.kid import KernelInceptionDistance
+from torchmetrics.image.fid import FrechetInceptionDistance
 
 import diffusers
 from diffusers import DDPMPipeline, DDPMScheduler, UNet2DModel
@@ -693,7 +694,22 @@ def main(args):
                 for i, img in enumerate(images_processed):
                     save_path = os.path.join(save_dir, f"{epoch}_{i}.png")
                     # save np array to image
-                    _img = Image.fromarray(img).save(save_path)
+                    Image.fromarray(img).save(save_path)
+                
+                # calcuate FID and KID metrics
+                subset_size = 5
+                kid = KernelInceptionDistance(subset_size=subset_size)
+                fid = FrechetInceptionDistance(subset_size=subset_size)
+                generated_imgs = torch.tensor(images_processed,dtype=torch.uint8).permute(0, 3, 1, 2)
+                kid.update(generated_imgs, real = False)
+                fid.update(generated_imgs, real = False)
+                provided_imgs = np.array(dataset[:]["input"])
+                provided_imgs = torch.tensor(provided_imgs,dtype=torch.uint8)
+                kid.update(provided_imgs, real = True)
+                fid.update(provided_imgs, real = True)
+                kid_value = kid.compute()
+                fid_value = fid.compute()
+                accelerator.log({"kid_mean": kid_value[0], "kid_var": kid_value[1], "fid": fid_value, "epoch": epoch}, step=global_step)
 
 
             if epoch % args.save_model_epochs == 0 or epoch == args.num_epochs - 1:
