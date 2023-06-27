@@ -13,7 +13,9 @@ import torch.nn.functional as F
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration
-from datasets import load_dataset, Image
+from datasets import load_dataset
+from datasets import Image as data_Image
+from PIL import Image
 from huggingface_hub import HfFolder, Repository, create_repo, whoami
 from packaging import version
 from torchvision import transforms
@@ -480,7 +482,7 @@ def main(args):
             path_list = path_list[: args.num_img_to_train]
         else:
             print("Using all images in the training data directory.")
-        dataset = datasets.Dataset.from_dict({"image": [str(path) for path in path_list]}).cast_column("image", Image(decode=True))
+        dataset = datasets.Dataset.from_dict({"image": [str(path) for path in path_list]}).cast_column("image", data_Image(decode=True))
     # Preprocessing the datasets and DataLoaders creation.
     augmentations = transforms.Compose(
         [
@@ -682,6 +684,15 @@ def main(args):
                         {"test_samples": [wandb.Image(img) for img in images_processed], "epoch": epoch},
                         step=global_step,
                     )
+                
+                # save img locally
+                save_dir = os.path.join(args.output_dir, "images")
+                os.makedirs(save_dir, exist_ok=True)
+                for i, img in enumerate(images_processed):
+                    save_path = os.path.join(save_dir, f"{epoch}_{i}.png")
+                    # save np array to image
+                    _img = Image.fromarray(img).save(save_path)
+
 
             if epoch % args.save_model_epochs == 0 or epoch == args.num_epochs - 1:
                 # save the model
