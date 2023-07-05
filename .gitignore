@@ -1,4 +1,5 @@
-./resources/*
+uncond_img_gen/*
+resources/*
 dreambooth/output/*
 uncond_img_gen/output/*
 .DS_Store
