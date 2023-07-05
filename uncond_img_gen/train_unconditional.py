@@ -31,7 +31,7 @@ from diffusers.optimization import get_scheduler
 from diffusers.training_utils import EMAModel
 from diffusers.utils import check_min_version, is_accelerate_version, is_tensorboard_available, is_wandb_available
 from diffusers.utils.import_utils import is_xformers_available
-import math.ceil
+import math
 
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
@@ -77,7 +77,7 @@ def parse_args():
         help="The config of the Dataset, leave as None if there's only one config.",
     )
     parser.add_argument("--train", action="store_true", help="Whether to run training.")
-    parser.add_argument("--eval", action="store_true", help="Whether to run eval to generate images")
+    parser.add_argument("--test", action="store_true", help="Whether to run testing and generate images")
     parser.add_argument(
         "--num_img_to_train",
         type=int,
@@ -99,7 +99,7 @@ def parse_args():
     parser.add_argument(
         "--train_data_dir",
         type=str,
-        default=None,
+        default="/home/siyuan/image_to_img_generation/resources/xray_images/gi",
         help=(
             "A folder containing the training data. Folder contents must follow the structure described in"
             " https://huggingface.co/docs/datasets/image_dataset#imagefolder. In particular, a `metadata.jsonl` file"
@@ -537,7 +537,7 @@ def main(args):
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
         run = os.path.split(__file__)[-1].split(".")[0]
-        accelerator.init_trackers(project_name = "uncond_img_gem", config=args)
+        accelerator.init_trackers(project_name = "uncond_img_gen", config=args)
         # project_name="img_gen_pipeline",
         # config = args
         # accelerator.init_trackers(project_name = project_name, config=config)
@@ -567,7 +567,7 @@ def main(args):
             args.resume_from_checkpoint = None
         else:
             accelerator.print(f"Resuming from checkpoint {path}")
-            accelerator.load_state(os.path.join(args.output_dir, path))
+            accelerator.load_state(args.resume_from_checkpoint)
             global_step = int(path.split("-")[1])
 
             resume_global_step = global_step * args.gradient_accumulation_steps
@@ -748,18 +748,18 @@ def main(args):
         logger.info("***** Running testing *****")
         logger.info(f"***** Total Image Generated: {args.num_img_to_gen}*****")
         model.eval()
-        total_epochs = math.ceil(args.num_img_to_gen / args.eval_batch_size)
-        progress_bar = tqdm(total=total_epochs, disable=not accelerator.is_local_main_process)
-        progress_bar.set_description(f"Epoch {epoch}")
-        
         # how to load the model
         unet = accelerator.unwrap_model(model)
         pipeline = DDPMPipeline(
                         unet=unet,
                         scheduler=noise_scheduler,
                     )
+        generated_img = []
+        total_epochs = math.ceil(args.num_img_to_gen / args.eval_batch_size)
         for epoch in range(total_epochs):
-            generator = torch.Generator(device=pipeline.device).to("cuda")
+            progress_bar = tqdm(total=total_epochs, disable=not accelerator.is_local_main_process)
+            progress_bar.set_description(f"Epoch {epoch}")
+            generator = torch.Generator(device=pipeline.device)
             # run pipeline in inference (sample random noise and denoise)
             images = pipeline(
                 generator=generator,
@@ -767,15 +767,18 @@ def main(args):
                 num_inference_steps=args.ddpm_num_inference_steps,
                 output_type="numpy",
             ).images
-
-            images_processed = (images * 255).round().astype("uint8")
-            # save img locally
-            save_dir = os.path.join(args.output_dir, "images")
-            os.makedirs(save_dir, exist_ok=True)
-            for i, img in enumerate(images_processed):
-                save_path = os.path.join(save_dir, f"{epoch}_{i}.png")
-                # save np array to image
-                Image.fromarray(img).save(save_path)
+            generated_img.append(images)
+            progress_bar.update(1)
+        progress_bar.close()
+        images = np.concatenate(generated_img, axis=0)
+        images_processed = (images * 255).round().astype("uint8")
+        # save img locally
+        save_dir = os.path.join(args.output_dir, "images")
+        os.makedirs(save_dir, exist_ok=True)
+        for i, img in enumerate(images_processed):
+            save_path = os.path.join(save_dir, f"{epoch}_{i}.png")
+            # save np array to image
+            Image.fromarray(img).save(save_path)
 
 
     accelerator.end_training()
