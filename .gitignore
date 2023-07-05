@@ -1,4 +1,5 @@
 uncond_img_gen/*
+uncond_img_gen/wandb/*
 resources/*
 dreambooth/output/*
 uncond_img_gen/output/*
