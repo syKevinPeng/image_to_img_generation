@@ -14,3 +14,4 @@ accelerate launch train_unconditional.py \
   --ddpm_num_steps 1000 \
   --ddpm_num_inference_steps 1000 \
   --save_model_epochs 10000 \
+  --enable_xformers_memory_efficient_attention \
