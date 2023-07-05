@@ -528,7 +528,7 @@ def main(args):
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
         run = os.path.split(__file__)[-1].split(".")[0]
-        accelerator.init_trackers(run, config=args)
+        accelerator.init_trackers(project_name = "uncond_img_gem", config=args)
         # project_name="img_gen_pipeline",
         # config = args
         # accelerator.init_trackers(project_name = project_name, config=config)
@@ -697,7 +697,7 @@ def main(args):
                     Image.fromarray(img).save(save_path)
                 
                 # calcuate FID and KID metrics
-                subset_size = 5
+                subset_size = 4
                 kid = KernelInceptionDistance(subset_size=subset_size)
                 fid = FrechetInceptionDistance(subset_size=subset_size)
                 generated_imgs = torch.tensor(images_processed,dtype=torch.uint8).permute(0, 3, 1, 2)
