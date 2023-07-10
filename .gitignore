@@ -1,8 +1,7 @@
-uncond_img_gen/*
 uncond_img_gen/wandb/*
 resources/*
 dreambooth/output/*
-uncond_img_gen/output/*
+uncond_img_gen/output_*
 .DS_Store
 **/wandb/*
 # Byte-compiled / optimized / DLL files
