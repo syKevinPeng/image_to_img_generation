@@ -537,7 +537,7 @@ def main(args):
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
         run = os.path.split(__file__)[-1].split(".")[0]
-        accelerator.init_trackers(project_name = "uncond_img_gen", config=args)
+        accelerator.init_trackers(project_name = "x-ray_gen", config=args)
         # project_name="img_gen_pipeline",
         # config = args
         # accelerator.init_trackers(project_name = project_name, config=config)
