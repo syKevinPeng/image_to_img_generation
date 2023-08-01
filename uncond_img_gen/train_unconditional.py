@@ -489,9 +489,9 @@ def main(args):
         # https://huggingface.co/docs/datasets/v2.4.0/en/image_load#imagefolder
         # customize dataset selection here
         # get a list of subfiles
-        path_list = list(Path(args.train_data_dir).glob("*.jpg"))
+        path_list = list(Path(args.train_data_dir).glob("*.jpg")) + list(Path(args.train_data_dir).glob("*.png"))
         if len(path_list) == 0:
-            raise ValueError("No images found in the training data directory end with format jpg.")
+            raise ValueError("No images found in the training data directory end with format jpg or png.")
         if args.num_img_to_train is not None:
             if args.num_img_to_train > len(path_list): raise Exception("num_img_to_train is larger than the number of images in the training data directory.")
             path_list = path_list[: args.num_img_to_train]
@@ -525,7 +525,7 @@ def main(args):
         args.lr_scheduler,
         optimizer=optimizer,
         num_warmup_steps=args.lr_warmup_steps * args.gradient_accumulation_steps,
-        num_training_steps=(len(train_dataloader) * args.num_epochs),
+        num_training_steps=(len(train_dataloader) * args.init_epochs),
     )
 
     # Prepare everything with our `accelerator`.
@@ -540,14 +540,11 @@ def main(args):
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
         run = os.path.split(__file__)[-1].split(".")[0]
-        accelerator.init_trackers(project_name = "pathology_gen", config=args)
-        # project_name="img_gen_pipeline",
-        # config = args
-        # accelerator.init_trackers(project_name = project_name, config=config)
+        accelerator.init_trackers(project_name = "mammo_gen", config=args)
 
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
-    max_train_steps = args.num_epochs * num_update_steps_per_epoch
+    max_train_steps = args.init_epochs * num_update_steps_per_epoch
 
     global_step = 0
     first_epoch = 0
@@ -581,13 +578,13 @@ def main(args):
     if args.train:
         logger.info("***** Running training *****")
         logger.info(f"  Num examples = {len(dataset)}")
-        logger.info(f"  Num of initial Epochs to train = {args.num_epochs}")
+        logger.info(f"  Num of initial Epochs to train = {args.init_epochs}")
         logger.info(f"  Training will stop when FID score reaches {args.target_fid}")
         logger.info(f"  Instantaneous batch size per device = {args.train_batch_size}")
         logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
         logger.info(f"  Gradient Accumulation steps = {args.gradient_accumulation_steps}")
-        logger.info(f"  Total optimization steps = {max_train_steps}")
-        end_epoch_num = args.num_epochs
+        logger.info(f"  Total optimization steps for initial training = {max_train_steps}")
+        end_epoch_num = args.init_epochs
         start_epoch_num = first_epoch
         end_training = False
         while not end_training:
@@ -665,7 +662,7 @@ def main(args):
 
                 # Generate sample images for visual inspection
                 if accelerator.is_main_process:
-                    if epoch % args.save_images_epochs == 0 or epoch == args.num_epochs - 1:
+                    if epoch % args.save_images_epochs == 0 or epoch == args.init_epochs - 1:
                         unet = accelerator.unwrap_model(model)
 
                         if args.use_ema:
@@ -729,7 +726,7 @@ def main(args):
                         accelerator.log({"kid_mean": kid_value[0], "kid_var": kid_value[1], "fid": fid_value, "epoch": epoch}, step=global_step)
 
 
-                    if epoch % args.save_model_epochs == 0 or epoch == args.num_epochs - 1:
+                    if epoch % args.save_model_epochs == 0 or epoch == args.init_epochs - 1:
                         # save the model
                         unet = accelerator.unwrap_model(model)
 
@@ -758,6 +755,14 @@ def main(args):
                 end_training = False
             start_epoch_num = end_epoch_num
             end_epoch_num += 1000
+            
+            # prepare a new lr scheduler
+            lr_scheduler = get_scheduler(
+            args.lr_scheduler,
+            optimizer=optimizer,
+            num_warmup_steps=args.lr_warmup_steps * args.gradient_accumulation_steps,
+            num_training_steps=(len(train_dataloader) * 1000))
+            lr_scheduler = accelerator.prepare(lr_scheduler)
     
     
     # testing/image generation phase
