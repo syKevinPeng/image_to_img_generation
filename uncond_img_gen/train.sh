@@ -1,19 +1,18 @@
 accelerate launch train_unconditional.py \
   --train \
-  --train_data_dir "/home/siyuan/dataset/mamo_dataset/Calc" \
-  --num_img_to_train=50 \
+  --train_data_dir "/home/siyuan/dataset/MGD1k/Meiboscore_0" \
+  --num_img_to_train=25 \
   --resolution=512 \
-  --output_dir "./output_Calc_50imgs" \
+  --output_dir "./output_meiboscore_0" \
   --train_batch_size=1 \
   --gradient_accumulation_steps=1 \
   --learning_rate=1e-4 \
   --lr_warmup_steps=500 \
   --mixed_precision=no \
   --eval_batch_size=4 \
-  --save_images_epochs 1000 \
-  --ddpm_num_steps 500 \
-  --ddpm_num_inference_steps 500 \
+  --save_images_epochs 500 \
+  --ddpm_num_steps 2000 \
+  --ddpm_num_inference_steps 2000 \
   --save_model_epochs 10000 \
-  --init_epochs 2000 \
+  --init_epochs 500 \
   --target_fid 500 \
-  --resume_from_checkpoint /home/siyuan/image_to_img_generation/uncond_img_gen/output_Calc_50imgs/checkpoint-15000
