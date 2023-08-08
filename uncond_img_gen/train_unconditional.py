@@ -573,6 +573,7 @@ def main(args):
             resume_global_step = global_step * args.gradient_accumulation_steps
             first_epoch = global_step // num_update_steps_per_epoch
             resume_step = resume_global_step % (num_update_steps_per_epoch * args.gradient_accumulation_steps)
+        fid_value = args.target_fid + 1 # add fid value placehold to pass the fid check
 
     # Train!
     if args.train:
