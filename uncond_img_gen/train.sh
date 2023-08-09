@@ -16,4 +16,4 @@ accelerate launch train_unconditional.py \
   --save_model_epochs 10000 \
   --init_epochs 500 \
   --target_fid 500 \
-  --resume_from_checkpoint /home/siyuan/image_to_img_generation/uncond_img_gen/output_meiboscore_0/checkpoint-35500
+  --resume_from_checkpoint /home/siyuan/image_to_img_generation/uncond_img_gen/output_meiboscore_0/checkpoint-93500

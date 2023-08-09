@@ -754,8 +754,13 @@ def main(args):
                 break
             else:
                 end_training = False
-            start_epoch_num = end_epoch_num
-            end_epoch_num += 1000
+            
+            # handle the case when resuming from checkpoint, the resumed epoch is larger than init epoch
+            if start_epoch_num < end_epoch_num:
+                start_epoch_num = end_epoch_num
+                end_epoch_num += args.save_images_epochs
+            else:
+                end_epoch_num = start_epoch_num + args.save_images_epochs
             
             # prepare a new lr scheduler
             lr_scheduler = get_scheduler(
